@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinaria López - Panel de Administración</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para las tablas y consola del admin */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--gray);
+            padding-bottom: 15px;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: var(--gray);
+            color: var(--dark);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .data-table th, .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table th {
+            background-color: var(--dark);
+            color: white;
+            font-weight: 600;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .badge-pendiente { background-color: #FFEAA7; color: #D6A2E8; /* Ajustado para legibilidad */ color: #8A6D3B; }
+        .badge-esperando { background-color: #Dff0D8; color: #3C763D; }
+        .badge-confirmado { background-color: #D4EDDA; color: #155724; }
+        
+        .modal-asignacion {
+            background-color: #f9f9f9;
+            border: 2px solid var(--primary);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 14px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">🐾 Admin - Veterinaria López</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Ver Sitio Público</a></li>
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        
+        <!-- PANTALLA 1: LOGIN DE SEGURIDAD -->
+        <div id="login-panel" class="card-form" style="max-width: 400px; margin: 80px auto;">
+            <h2 class="form-title">Control de Acceso</h2>
+            <div id="login-error" class="alert alert-error" style="display: none; font-size: 14px; padding: 10px;"></div>
+            <div class="form-group">
+                <label for="admin-password">Contraseña Administrativa:</label>
+                <input type="password" id="admin-password" placeholder="Ingrese clave (admin123)">
+            </div>
+            <button onclick="intentarLogin()" class="btn">Ingresar al Panel</button>
+        </div>
+
+        <!-- PANTALLA 2: DASHBOARD CENTRAL -->
+        <div id="dashboard-panel" style="display: none;">
+            <div class="admin-header">
+                <div>
+                    <h1>Consola de Gestión de Turnos</h1>
+                    <p style="color: #7F8C8D;">Administración interna de solicitudes de citas médicas</p>
+                </div>
+                <button onclick="cargarDatos()" class="btn btn-sm" style="background-color: var(--dark);">🔄 Sincronizar Datos</button>
+            </div>
+
+            <!-- Pestañas de Navegación -->
+            <div class="admin-tabs">
+                <button id="tab-pendientes" class="tab-btn active" onclick="cambiarPestaña('Pendiente')">Nuevas Solicitudes (Pendientes)</button>
+                <button id="tab-confirmados" class="tab-btn" onclick="cambiarPestaña('Otras')">Turnos Agendados / Confirmados</button>
+            </div>
+
+            <!-- Mensajes de Estado del Dashboard -->
+            <div id="dashboard-alerta" style="display: none;"></div>
+
+            <!-- Tabla de Datos -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente / Mascota</th>
+                        <th>Motivo de Consulta</th>
+                        <th>Fecha Propuesta</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cuerpo">
+                    <!-- Se carga dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+
+            <!-- SECCIÓN OCULTA: Consola de Asignación de Turno -->
+            <div id="consola-asignacion" class="modal-asignacion">
+                <h3 style="margin-bottom: 15px; color: var(--primary);">Programar y Confirmar Turno (ID: <span id="asig-id-turno"></span>)</h3>
+                <div id="asignacion-alerta" style="display: none;"></div>
+                
+                <form id="form-asignar">
+                    <input type="hidden" id="asig-input-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="asig-veterinario">Asignar Profesional Médico:</label>
+                            <select id="asig-veterinario" required>
+                                <option value="">Seleccione un veterinario</option>
+                                <!-- Se carga dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="asig-fecha">Confirmar Fecha de Cita:</label>
+                            <input type="date" id="asig-fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="asig-hora">Confirmar Horario (HH:MM):</label>
+                            <input type="time" id="asig-hora" required>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 15px; margin-top: 15px;">
+                        <button type="submit" class="btn btn-secondary" style="width: auto;">Aprobar y Enviar Email de Cobro</button>
+                        <button type="button" class="btn" style="background-color: var(--gray); color: var(--dark); width: auto;" onclick="cerrarConsola()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Veterinaria López. Acceso Restringido para Personal Autorizado.</p>
+    </footer>
+
+    <!-- LÓGICA DE CONTROL DE INTERFAZ -->
+    <script>
+        let pestañaActual = 'Pendiente'; // 'Pendiente' o 'Otras'
+        let veterinariosCargados = [];
+
+        // Validar si el administrador ya estaba logueado anteriormente
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('admin_login') === 'true') {
+                mostrarDashboard();
+            }
+        });
+
+        // Simulación de Login Seguro
+        function intentarLogin() {
+            const passwordInput = document.getElementById('admin-password');
+            const errorDiv = document.getElementById('login-error');
+
+            if (passwordInput.value === 'admin123') {
+                sessionStorage.setItem('admin_login', 'true');
+                mostrarDashboard();
+            } else {
+                errorDiv.innerText = "Contraseña incorrecta. Intente de nuevo.";
+                errorDiv.style.display = 'block';
+                passwordInput.value = '';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('admin_login');
+            location.reload();
+        }
+
+        async function mostrarDashboard() {
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('dashboard-panel').style.display = 'block';
+            
+            // Cargar datos fundamentales
+            await cargarVeterinarios();
+            await cargarDatos();
+        }
+
+        // Obtener veterinarios dinámicamente desde el Backend
+        async function cargarVeterinarios() {
+            try {
+                const respuesta = await fetch('/api/veterinarios');
+                veterinariosCargados = await respuesta.json();
+                
+                const selectVet = document.getElementById('asig-veterinario');
+                selectVet.innerHTML = '<option value="">Seleccione un veterinario</option>';
+                
+                veterinariosCargados.forEach(vet => {
+                    const option = document.createElement('option');
+                    option.value = vet.id_veterinario;
+                    option.textContent = `${vet.nombre} (${vet.especialidad})`;
+                    selectVet.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error al cargar veterinarios:", error);
+            }
+        }
+
+        // Cambiar entre pestañas de turnos
+        function cambiarPestaña(pestaña) {
+            pestañaActual = pestaña;
+            document.getElementById('tab-pendientes').className = pestañaActual === 'Pendiente' ? 'tab-btn active' : 'tab-btn';
+            document.getElementById('tab-confirmados').className = pestañaActual === 'Otras' ? 'tab-btn active' : 'tab-btn';
+            cerrarConsola();
+            cargarDatos();
+        }
+
+        // Cargar y listar turnos desde la base de datos
+        async function cargarDatos() {
+            const tablaCuerpo = document.getElementById('tabla-cuerpo');
+            tablaCuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando solicitudes...</td></tr>';
+
+            try {
+                // Si la pestaña es 'Pendiente', pasamos el filtro en la query API
+                const url = pestañaActual === 'Pendiente' ? '/api/admin/turnos?estado=Pendiente' : '/api/admin/turnos';
+                const respuesta = await fetch(url);
+                const turnos = await respuesta.json();
+
+                tablaCuerpo.innerHTML = '';
+
+                // Si seleccionamos "Otras", filtramos para quitar los pendientes de la lista
+                const turnosFiltrados = pestañaActual === 'Pendiente' 
+                    ? turnos 
+                    : turnos.filter(t => t.estado_turno !== 'Pendiente');
+
+                if (turnosFiltrados.length === 0) {
+                    tablaCuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay turnos registrados en esta sección.</td></tr>';
+                    return;
+                }
+
+                turnosFiltrados.forEach(turno => {
+                    const tr = document.createElement('tr');
+                    
+                    // Formatear Fecha
+                    const fechaPropuesta = new Date(turno.fecha_preferida).toLocaleDateString('es-AR', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
+                    
+                    // Clase del badge según estado
+                    let badgeClass = 'badge-pendiente';
+                    if (turno.estado_turno === 'Esperando Pago') badgeClass = 'badge-esperando';
+                    if (turno.estado_turno === 'Confirmado') badgeClass = 'badge-confirmado';
+
+                    // Botón de acción dinámico
+                    let accionBtn = '';
+                    if (turno.estado_turno === 'Pendiente') {
+                        accionBtn = `<button class="btn btn-sm" onclick="abrirConsola(${turno.id_turno}, '${turno.fecha_preferida.substring(0,10)}')">Gestionar</button>`;
+                    } else {
+                        // Si ya está gestionado, mostramos con quién se agendó
+                        accionBtn = `<span style="font-size: 13px; color: #7F8C8D;">Vet: ${turno.veterinario ? turno.veterinario.nombre.split(' ')[1] : 'Asignado'}</span>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td><strong>#${turno.id_turno}</strong></td>
+                        <td>
+                            <strong>${turno.cliente_nombre}</strong> <br>
+                            <span style="font-size: 12px; color: #7F8C8D;">Mascota: ${turno.mascota_nombre} (${turno.mascota_especie})</span>
+                        </td>
+                        <td>${turno.motivo_consulta}</td>
+                        <td>${fechaPropuesta}</td>
+                        <td><span class="badge ${badgeClass}">${turno.estado_turno} (${turno.estado_pago})</span></td>
+                        <td>${accionBtn}</td>
+                    `;
+                    tablaCuerpo.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error("Error al cargar turnos:", error);
+                tablaCuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error al sincronizar con el servidor.</td></tr>';
+            }
+        }
+
+        // Abrir panel inferior de asignación de turnos
+        function abrirConsola(id, fechaSugerida) {
+            document.getElementById('asig-id-turno').textContent = id;
+            document.getElementById('asig-input-id').value = id;
+            document.getElementById('asig-fecha').value = fechaSugerida;
+            document.getElementById('asig-hora').value = "10:00"; // Hora por defecto sugerida
+            document.getElementById('consola-asignacion').style.display = 'block';
+            document.getElementById('consola-asignacion').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cerrarConsola() {
+            document.getElementById('consola-asignacion').style.display = 'none';
+            document.getElementById('form-asignar').reset();
+        }
+
+        // Enviar formulario de asignación al Backend (PUT)
+        document.getElementById('form-asignar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('asig-input-id').value;
+            const datosAsignacion = {
+                fecha_confirmada: document.getElementById('asig-fecha').value,
+                hora_confirmada: document.getElementById('asig-hora').value,
+                id_veterinario: document.getElementById('asig-veterinario').value
+            };
+
+            const alertaDiv = document.getElementById('asignacion-alerta');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando email de cobro...';
+
+            try {
+                const respuesta = await fetch(`/api/admin/turnos/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosAsignacion)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    cerrarConsola();
+                    // Mostrar éxito en el Dashboard general
+                    const dashAlerta = document.getElementById('dashboard-alerta');
+                    dashAlerta.className = "alert alert-success";
+                    dashAlerta.innerText = "¡Cita aprobada! Se actualizó la base de datos y se envió el correo de pago simulado al cliente.";
+                    dashAlerta.style.display = 'block';
+                    
+                    // Sincronizar tabla de datos
+                    await cargarDatos();
+                    
+                    setTimeout(() => { dashAlerta.style.display = 'none'; }, 6000);
+                } else {
+                    alertaDiv.className = "alert alert-error";
+                    alertaDiv.innerText = resultado.error || "Ocurrió un error al procesar el turno.";
+                    alertaDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Error en asignación:", error);
+                alertaDiv.className = "alert alert-error";
+                alertaDiv.innerText = "Error de comunicación con el servidor.";
+                alertaDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Aprobar y Enviar Email de Cobro';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinaria López - Pago de Reserva</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para la página de pago */
+        .payment-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .payment-container h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        .payment-details {
+            background-color: #f0f8ff;
+            border: 1px solid #cceeff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .payment-details p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .payment-details strong {
+            color: var(--dark);
+        }
+        .qr-code img {
+            max-width: 180px;
+            height: auto;
+            border: 1px solid var(--gray);
+            padding: 5px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn-confirm-payment {
+            margin-top: 30px;
+            background-color: var(--secondary);
+        }
+        .btn-confirm-payment:hover {
+            background-color: var(--secondary-hover);
+        }
+        .mensaje-pago {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">🐾 Veterinaria López</a>
+            <ul class="nav-links">
+                <li><a href="index.html#inicio">Inicio</a></li>
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#reservar">Reservar Turno</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="payment-container">
+            <h1>Confirmación de Pago de Reserva</h1>
+            
+            <div id="loading-spinner" style="display: none; margin-bottom: 20px;">
+                <div class="loader"></div> <p style="display: inline-block; margin-left: 10px;">Cargando detalles del turno...</p>
+            </div>
+
+            <div id="turno-info" style="display: none;">
+                <div class="payment-details">
+                    <p><strong>Cliente:</strong> <span id="cliente-nombre"></span></p>
+                    <p><strong>Mascota:</strong> <span id="mascota-nombre"></span> (<span id="mascota-especie"></span>)</p>
+                    <p><strong>Motivo:</strong> <span id="motivo-consulta"></span></p>
+                    <p><strong>Fecha Asignada:</strong> <span id="fecha-confirmada"></span></p>
+                    <p><strong>Hora Asignada:</strong> <span id="hora-confirmada"></span></p>
+                    <p><strong>Veterinario:</strong> <span id="veterinario-asignado"></span></p>
+                    <p><strong>Estado del Turno:</strong> <span id="estado-turno"></span></p>
+                    <p><strong>Estado del Pago:</strong> <span id="estado-pago"></span></p>
+                </div>
+
+                <div class="qr-code">
+                    <p>Escanea para simular el pago:</p>
+                    <img id="qr-image" src="" alt="Código QR de Pago">
+                </div>
+
+                <button id="btn-pagar" class="btn btn-secondary btn-confirm-payment">Simular Pago Ahora</button>
+            </div>
+
+            <div id="mensaje-final" class="mensaje-pago" style="display: none;"></div>
+            <a href="index.html" class="btn" style="margin-top: 20px; display: none;" id="btn-volver-inicio">Volver al Inicio</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Veterinaria López. Proyecto académico para Metodología de la Investigación.</p>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token'); // Obtiene el token de la URL
+
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const turnoInfoDiv = document.getElementById('turno-info');
+        const mensajeFinalDiv = document.getElementById('mensaje-final');
+        const btnPagar = document.getElementById('btn-pagar');
+        const btnVolverInicio = document.getElementById('btn-volver-inicio');
+
+        // Selectores de los elementos HTML del DOM
+        const clienteNombre = document.getElementById('cliente-nombre');
+        const mascotaNombre = document.getElementById('mascota-nombre');
+        const mascotaEspecie = document.getElementById('mascota-especie');
+        const motivoConsulta = document.getElementById('motivo-consulta');
+        const fechaConfirmada = document.getElementById('fecha-confirmada');
+        const horaConfirmada = document.getElementById('hora-confirmada'); // <-- ¡AGREGADO DE FORMA SEGURA!
+        const veterinarioAsignado = document.getElementById('veterinario-asignado');
+        const estadoTurno = document.getElementById('estado-turno');
+        const estadoPago = document.getElementById('estado-pago');
+        const qrImage = document.getElementById('qr-image');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!token) {
+                mostrarMensajeError("Token de pago no encontrado en la URL. El enlace es inválido.");
+                return;
+            }
+
+            loadingSpinner.style.display = 'block'; // Mostrar spinner de carga
+            turnoInfoDiv.style.display = 'none';
+            btnPagar.style.display = 'none';
+
+            try {
+                // Endpoint para obtener detalles del turno por token
+                const respuesta = await fetch(`/api/turnos/token/${token}`);
+                const datos = await respuesta.json();
+
+                if (respuesta.ok) {
+                    // Cargar datos en la interfaz
+                    clienteNombre.textContent = datos.cliente_nombre;
+                    mascotaNombre.textContent = datos.mascota_nombre;
+                    mascotaEspecie.textContent = datos.mascota_especie;
+                    motivoConsulta.textContent = datos.motivo_consulta;
+                    fechaConfirmada.textContent = new Date(datos.fecha_confirmada).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    // === NUEVA LÓGICA DE FORMATEO DE HORA ===
+                    if (datos.hora_confirmada) {
+                        const horaDate = new Date(datos.hora_confirmada);
+                        const horas = String(horaDate.getUTCHours()).padStart(2, '0');
+                        const minutos = String(horaDate.getUTCMinutes()).padStart(2, '0');
+                        horaConfirmada.textContent = `${horas}:${minutos} hs`;
+                    } else {
+                        horaConfirmada.textContent = 'No asignada';
+                    }
+                    // ========================================
+
+                    veterinarioAsignado.textContent = datos.veterinario ? `${datos.veterinario.nombre} (${datos.veterinario.especialidad})` : 'No asignado';
+                    estadoTurno.textContent = datos.estado_turno;
+                    estadoPago.textContent = datos.estado_pago;
+
+                    // Generar QR dinámicamente
+                    const urlQR = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.href)}`;
+                    qrImage.src = urlQR;
+
+                    turnoInfoDiv.style.display = 'block';
+                    if (datos.estado_pago !== 'Pagado') {
+                         btnPagar.style.display = 'block'; // Solo mostrar botón si no está pagado
+                    } else {
+                        mostrarMensajeExito("¡Este turno ya ha sido pagado y confirmado!");
+                    }
+
+                } else {
+                    mostrarMensajeError(datos.error || "No se pudo encontrar el turno con el token proporcionado.");
+                }
+
+            } catch (error) {
+                console.error("Error al obtener detalles del turno:", error);
+                mostrarMensajeError("Error de conexión al obtener los detalles del turno.");
+            } finally {
+                loadingSpinner.style.display = 'none'; // Ocultar spinner
+            }
+        });
+
+        btnPagar.addEventListener('click', async () => {
+            btnPagar.disabled = true; // Deshabilitar para evitar múltiples clics
+            btnPagar.textContent = 'Procesando pago...';
+
+            try {
+                const respuesta = await fetch('/api/pagar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token: token })
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    mostrarMensajeExito(resultado.mensaje);
+                    estadoTurno.textContent = 'Confirmado';
+                    estadoPago.textContent = 'Pagado';
+                    btnPagar.style.display = 'none'; // Ocultar el botón después de pagar
+                    btnVolverInicio.style.display = 'block';
+                } else {
+                    mostrarMensajeError(resultado.error || "Error al simular el pago.");
+                    btnPagar.disabled = false;
+                    btnPagar.textContent = 'Simular Pago Ahora';
+                }
+            } catch (error) {
+                console.error("Error al simular pago:", error);
+                mostrarMensajeError("Error de conexión al procesar el pago.");
+                btnPagar.disabled = false;
+                btnPagar.textContent = 'Simular Pago Ahora';
+            }
+        });
+
+        function mostrarMensajeError(mensaje) {
+            mensajeFinalDiv.className = "mensaje-pago alert alert-error";
+            mensajeFinalDiv.innerText = mensaje;
+            mensajeFinalDiv.style.display = "block";
+            btnVolverInicio.style.display = 'block'; // Permitir volver al inicio si hay error
+        }
+
+        function mostrarMensajeExito(mensaje) {
+            mensajeFinalDiv.className = "mensaje-pago alert alert-success";
+            mensajeFinalDiv.innerText = mensaje;
+            mensajeFinalDiv.style.display = "block";
+            btnVolverInicio.style.display = 'block'; // Permitir volver al inicio si hay éxito
+        }
+    </script>
+</body>
+</html>
