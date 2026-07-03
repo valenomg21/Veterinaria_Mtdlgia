@@ -81,10 +81,22 @@ app.post('/api/turnos', async (req, res) => {
             fecha_preferida 
         } = req.body;
 
-        // Validación básica
+        // 1. Validación básica de campos vacíos
         if (!cliente_nombre || !cliente_telefono || !cliente_email || 
             !mascota_nombre || !mascota_especie || !motivo_consulta || !fecha_preferida) {
             return res.status(400).json({ error: "Todos los campos son obligatorios" });
+        }
+
+        // 2. [RECOMENDACIÓN 3] Validación de formatos mediante expresiones regulares (RegEx)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const telefonoRegex = /^\+?[0-9\s-]{7,20}$/; // Permite números, espacios, guiones y un opcional '+' inicial
+
+        if (!emailRegex.test(cliente_email)) {
+            return res.status(400).json({ error: "El correo electrónico provisto no tiene un formato válido." });
+        }
+
+        if (!telefonoRegex.test(cliente_telefono)) {
+            return res.status(400).json({ error: "El teléfono de contacto no tiene un formato válido (debe contener entre 7 y 20 dígitos numéricos)." });
         }
 
         const token_pago = crypto.randomBytes(32).toString('hex');
@@ -120,7 +132,7 @@ app.post('/api/turnos', async (req, res) => {
 });
 
 // ==========================================
-// ENDPOINT PÚBLICO (NUEVO/CORREGIDO): Obtener detalles de turno por token
+// ENDPOINT PÚBLICO: Obtener detalles de turno por token
 // ==========================================
 app.get('/api/turnos/token/:token', async (req, res) => {
     try {
@@ -181,9 +193,38 @@ app.put('/api/admin/turnos/:id', async (req, res) => {
             return res.status(400).json({ error: "Falta asignar fecha, hora o veterinario" });
         }
 
+        // 1. [RECOMENDACIÓN 2] Validación de Horario Comercial (08:00 a 20:00 hs)
+        const [horas, minutos] = hora_confirmada.split(':').map(Number);
+        if (horas < 8 || horas >= 20) {
+            return res.status(400).json({ error: "El horario de atención es exclusivamente de lunes a sábados de 08:00 a 20:00 hs." });
+        }
+
         const fechaFormateada = new Date(`${fecha_confirmada}T00:00:00`);
         const horaFormateada = new Date(`1970-01-01T${hora_confirmada}:00`);
 
+        // 2. [RECOMENDACIÓN 1 - RF-05] Validación de Concurrencia (Doble Reserva de Profesional)
+        // Buscamos si el veterinario ya tiene una cita confirmada o pre-agendada en esa fecha y hora
+        const choqueTurno = await prisma.turno.findFirst({
+            where: {
+                id_veterinario: parseInt(id_veterinario),
+                fecha_confirmada: fechaFormateada,
+                hora_confirmada: horaFormateada,
+                estado_turno: {
+                    in: ['Esperando Pago', 'Confirmado'] // Interfiere si ya está pre-confirmado o totalmente abonado
+                },
+                NOT: {
+                    id_turno: parseInt(id) // Excluir el propio turno que estamos editando en caso de re-guardado
+                }
+            }
+        });
+
+        if (choqueTurno) {
+            return res.status(400).json({ 
+                error: `Conflicto de agenda: El veterinario ya se encuentra asignado a otra cita el día ${fecha_confirmada} a las ${hora_confirmada} hs.` 
+            });
+        }
+
+        // 3. Si las validaciones son exitosas, actualizamos el registro
         const turnoActualizado = await prisma.turno.update({
             where: { id_turno: parseInt(id) },
             data: {
@@ -209,7 +250,7 @@ app.put('/api/admin/turnos/:id', async (req, res) => {
                 <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 5px solid #4A90E2;">
                     <h3 style="margin-top: 0; color: #333;">Detalles de la Cita Asignada:</h3>
                     <p><strong>Fecha:</strong> ${fecha_confirmada}</p>
-                    <p><strong>Hora:</strong> ${hora_confirmada}</p>
+                    <p><strong>Hora:</strong> ${hora_confirmada} hs</p>
                     <p><strong>Veterinario:</strong> ${turnoActualizado.veterinario.nombre} (${turnoActualizado.veterinario.especialidad})</p>
                 </div>
 
