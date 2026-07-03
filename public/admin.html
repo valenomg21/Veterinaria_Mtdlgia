@@ -3,121 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veterinaria López - Panel de Administración</title>
+    <title>Veterinaria López — Panel de Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Estilos específicos para las tablas y consola del admin */
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--gray);
-            padding-bottom: 15px;
-        }
-        .admin-tabs {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .tab-btn {
-            padding: 10px 20px;
-            background-color: var(--gray);
-            color: var(--dark);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
-        }
-        .data-table th, .data-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        .data-table th {
-            background-color: var(--dark);
-            color: white;
-            font-weight: 600;
-        }
-        .badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-        }
-        .badge-pendiente { background-color: #FFEAA7; color: #D6A2E8; /* Ajustado para legibilidad */ color: #8A6D3B; }
-        .badge-esperando { background-color: #Dff0D8; color: #3C763D; }
-        .badge-confirmado { background-color: #D4EDDA; color: #155724; }
-        
-        .modal-asignacion {
-            background-color: #f9f9f9;
-            border: 2px solid var(--primary);
-            padding: 25px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-        }
-        .btn-sm {
-            padding: 8px 14px;
-            font-size: 14px;
-            width: auto;
-        }
-    </style>
 </head>
 <body>
 
     <header>
         <nav class="navbar">
-            <a href="index.html" class="logo">🐾 Admin - Veterinaria López</a>
+            <a href="index.html" class="logo">
+                <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="19" fill="#1F4B3F"/>
+                    <g fill="#FBFAF6">
+                        <circle cx="20" cy="24" r="6.5"/>
+                        <circle cx="11.5" cy="15.5" r="3.6"/>
+                        <circle cx="20" cy="11" r="4"/>
+                        <circle cx="28.5" cy="15.5" r="3.6"/>
+                    </g>
+                </svg>
+                Admin · Veterinaria López
+            </a>
             <ul class="nav-links">
-                <li><a href="index.html">Ver Sitio Público</a></li>
-                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+                <li><a href="index.html">Ver sitio público</a></li>
+                <li><a href="#" onclick="logout()" class="nav-cta">Cerrar sesión</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="container">
-        
+    <main class="container admin-shell" style="padding-top: 48px; padding-bottom: 80px;">
+
         <!-- PANTALLA 1: LOGIN DE SEGURIDAD -->
-        <div id="login-panel" class="card-form" style="max-width: 400px; margin: 80px auto;">
-            <h2 class="form-title">Control de Acceso</h2>
-            <div id="login-error" class="alert alert-error" style="display: none; font-size: 14px; padding: 10px;"></div>
-            <div class="form-group">
-                <label for="admin-password">Contraseña Administrativa:</label>
-                <input type="password" id="admin-password" placeholder="Ingrese clave (admin123)">
+        <div id="login-panel" class="card-form" style="max-width: 400px; margin: 60px auto;">
+            <div class="card-form-body">
+                <span class="eyebrow" style="justify-content:center; width:100%;">Personal autorizado</span>
+                <h2 class="form-title">Control de acceso</h2>
+                <div id="login-error" class="alert alert-error" style="display: none; font-size: 14px; padding: 10px;"></div>
+                <div class="form-group">
+                    <label for="admin-password">Contraseña administrativa</label>
+                    <input type="password" id="admin-password" placeholder="Ingresá la clave (admin123)">
+                </div>
+                <button onclick="intentarLogin()" class="btn">Ingresar al panel</button>
             </div>
-            <button onclick="intentarLogin()" class="btn">Ingresar al Panel</button>
         </div>
 
         <!-- PANTALLA 2: DASHBOARD CENTRAL -->
         <div id="dashboard-panel" style="display: none;">
             <div class="admin-header">
                 <div>
-                    <h1>Consola de Gestión de Turnos</h1>
-                    <p style="color: #7F8C8D;">Administración interna de solicitudes de citas médicas</p>
+                    <span class="eyebrow">Panel interno</span>
+                    <h1 style="font-size: 28px;">Consola de gestión de turnos</h1>
+                    <p>Administración de solicitudes de citas médicas</p>
                 </div>
-                <button onclick="cargarDatos()" class="btn btn-sm" style="background-color: var(--dark);">🔄 Sincronizar Datos</button>
+                <button onclick="cargarDatos()" class="btn btn-sm btn-outline">Sincronizar datos</button>
             </div>
 
             <!-- Pestañas de Navegación -->
             <div class="admin-tabs">
-                <button id="tab-pendientes" class="tab-btn active" onclick="cambiarPestaña('Pendiente')">Nuevas Solicitudes (Pendientes)</button>
-                <button id="tab-confirmados" class="tab-btn" onclick="cambiarPestaña('Otras')">Turnos Agendados / Confirmados</button>
+                <button id="tab-pendientes" class="tab-btn active" onclick="cambiarPestaña('Pendiente')">Nuevas solicitudes</button>
+                <button id="tab-confirmados" class="tab-btn" onclick="cambiarPestaña('Otras')">Turnos agendados</button>
             </div>
 
             <!-- Mensajes de Estado del Dashboard -->
@@ -129,8 +73,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Cliente / Mascota</th>
-                        <th>Motivo de Consulta</th>
-                        <th>Fecha Propuesta</th>
+                        <th>Motivo de consulta</th>
+                        <th>Fecha propuesta</th>
                         <th>Estado</th>
                         <th>Acción</th>
                     </tr>
@@ -142,31 +86,31 @@
 
             <!-- SECCIÓN OCULTA: Consola de Asignación de Turno -->
             <div id="consola-asignacion" class="modal-asignacion">
-                <h3 style="margin-bottom: 15px; color: var(--primary);">Programar y Confirmar Turno (ID: <span id="asig-id-turno"></span>)</h3>
+                <h3>Programar y confirmar turno <span class="mono" style="color:var(--ink-soft); font-size:14px;">(ID <span id="asig-id-turno"></span>)</span></h3>
                 <div id="asignacion-alerta" style="display: none;"></div>
-                
+
                 <form id="form-asignar">
                     <input type="hidden" id="asig-input-id">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="asig-veterinario">Asignar Profesional Médico:</label>
+                            <label for="asig-veterinario">Asignar profesional médico</label>
                             <select id="asig-veterinario" required>
                                 <option value="">Seleccione un veterinario</option>
                                 <!-- Se carga dinámicamente -->
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="asig-fecha">Confirmar Fecha de Cita:</label>
+                            <label for="asig-fecha">Confirmar fecha de cita</label>
                             <input type="date" id="asig-fecha" required>
                         </div>
                         <div class="form-group">
-                            <label for="asig-hora">Confirmar Horario (HH:MM):</label>
+                            <label for="asig-hora">Confirmar horario (HH:MM)</label>
                             <input type="time" id="asig-hora" required>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 15px; margin-top: 15px;">
-                        <button type="submit" class="btn btn-secondary" style="width: auto;">Aprobar y Enviar Email de Cobro</button>
-                        <button type="button" class="btn" style="background-color: var(--gray); color: var(--dark); width: auto;" onclick="cerrarConsola()">Cancelar</button>
+                    <div style="display: flex; gap: 15px; margin-top: 5px;">
+                        <button type="submit" class="btn btn-secondary btn-inline">Aprobar y enviar email de cobro</button>
+                        <button type="button" class="btn btn-ghost btn-inline" onclick="cerrarConsola()">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -175,8 +119,10 @@
 
     </main>
 
-    <footer>
-        <p>&copy; 2026 Veterinaria López. Acceso Restringido para Personal Autorizado.</p>
+    <footer style="padding: 26px 0;">
+        <div class="footer-bottom" style="border-top:none; padding-top:0;">
+            &copy; 2026 Veterinaria López. Acceso restringido para personal autorizado.
+        </div>
     </footer>
 
     <!-- LÓGICA DE CONTROL DE INTERFAZ -->
@@ -214,7 +160,7 @@
         async function mostrarDashboard() {
             document.getElementById('login-panel').style.display = 'none';
             document.getElementById('dashboard-panel').style.display = 'block';
-            
+
             // Cargar datos fundamentales
             await cargarVeterinarios();
             await cargarDatos();
@@ -225,10 +171,10 @@
             try {
                 const respuesta = await fetch('/api/veterinarios');
                 veterinariosCargados = await respuesta.json();
-                
+
                 const selectVet = document.getElementById('asig-veterinario');
                 selectVet.innerHTML = '<option value="">Seleccione un veterinario</option>';
-                
+
                 veterinariosCargados.forEach(vet => {
                     const option = document.createElement('option');
                     option.value = vet.id_veterinario;
@@ -263,8 +209,8 @@
                 tablaCuerpo.innerHTML = '';
 
                 // Si seleccionamos "Otras", filtramos para quitar los pendientes de la lista
-                const turnosFiltrados = pestañaActual === 'Pendiente' 
-                    ? turnos 
+                const turnosFiltrados = pestañaActual === 'Pendiente'
+                    ? turnos
                     : turnos.filter(t => t.estado_turno !== 'Pendiente');
 
                 if (turnosFiltrados.length === 0) {
@@ -274,10 +220,10 @@
 
                 turnosFiltrados.forEach(turno => {
                     const tr = document.createElement('tr');
-                    
+
                     // Formatear Fecha
                     const fechaPropuesta = new Date(turno.fecha_preferida).toLocaleDateString('es-AR', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
-                    
+
                     // Clase del badge según estado
                     let badgeClass = 'badge-pendiente';
                     if (turno.estado_turno === 'Esperando Pago') badgeClass = 'badge-esperando';
@@ -286,17 +232,17 @@
                     // Botón de acción dinámico
                     let accionBtn = '';
                     if (turno.estado_turno === 'Pendiente') {
-                        accionBtn = `<button class="btn btn-sm" onclick="abrirConsola(${turno.id_turno}, '${turno.fecha_preferida.substring(0,10)}')">Gestionar</button>`;
+                        accionBtn = `<button class="btn btn-sm btn-outline" onclick="abrirConsola(${turno.id_turno}, '${turno.fecha_preferida.substring(0,10)}')">Gestionar</button>`;
                     } else {
                         // Si ya está gestionado, mostramos con quién se agendó
-                        accionBtn = `<span style="font-size: 13px; color: #7F8C8D;">Vet: ${turno.veterinario ? turno.veterinario.nombre.split(' ')[1] : 'Asignado'}</span>`;
+                        accionBtn = `<span style="font-size: 13px; color: var(--ink-soft);">Vet: ${turno.veterinario ? turno.veterinario.nombre.split(' ')[1] : 'Asignado'}</span>`;
                     }
 
                     tr.innerHTML = `
                         <td><strong>#${turno.id_turno}</strong></td>
                         <td>
                             <strong>${turno.cliente_nombre}</strong> <br>
-                            <span style="font-size: 12px; color: #7F8C8D;">Mascota: ${turno.mascota_nombre} (${turno.mascota_especie})</span>
+                            <span style="font-size: 12px; color: var(--ink-soft);">Mascota: ${turno.mascota_nombre} (${turno.mascota_especie})</span>
                         </td>
                         <td>${turno.motivo_consulta}</td>
                         <td>${fechaPropuesta}</td>
@@ -308,7 +254,7 @@
 
             } catch (error) {
                 console.error("Error al cargar turnos:", error);
-                tablaCuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error al sincronizar con el servidor.</td></tr>';
+                tablaCuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger);">Error al sincronizar con el servidor.</td></tr>';
             }
         }
 
@@ -330,7 +276,7 @@
         // Enviar formulario de asignación al Backend (PUT)
         document.getElementById('form-asignar').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const id = document.getElementById('asig-input-id').value;
             const datosAsignacion = {
                 fecha_confirmada: document.getElementById('asig-fecha').value,
@@ -340,7 +286,7 @@
 
             const alertaDiv = document.getElementById('asignacion-alerta');
             const submitBtn = e.target.querySelector('button[type="submit"]');
-            
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Enviando email de cobro...';
 
@@ -362,10 +308,10 @@
                     dashAlerta.className = "alert alert-success";
                     dashAlerta.innerText = "¡Cita aprobada! Se actualizó la base de datos y se envió el correo de pago simulado al cliente.";
                     dashAlerta.style.display = 'block';
-                    
+
                     // Sincronizar tabla de datos
                     await cargarDatos();
-                    
+
                     setTimeout(() => { dashAlerta.style.display = 'none'; }, 6000);
                 } else {
                     alertaDiv.className = "alert alert-error";
@@ -384,4 +330,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

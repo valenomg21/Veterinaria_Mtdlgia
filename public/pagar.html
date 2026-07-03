@@ -3,125 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veterinaria López - Pago de Reserva</title>
+    <title>Veterinaria López — Pago de Reserva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Estilos específicos para la página de pago */
         .payment-container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        .payment-container h1 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 32px;
+            max-width: 620px;
+            margin: 60px auto;
         }
         .payment-details {
-            background-color: #f0f8ff;
-            border: 1px solid #cceeff;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 30px;
+            background-color: var(--forest-light);
+            border: 1px solid #D3E4D9;
+            padding: 22px 24px;
+            border-radius: var(--radius-md);
+            margin-bottom: 28px;
             text-align: left;
         }
         .payment-details p {
-            margin-bottom: 10px;
-            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 7px 0;
+            border-bottom: 1px dashed #C7DBCD;
+            font-size: 14.5px;
         }
-        .payment-details strong {
-            color: var(--dark);
-        }
+        .payment-details p:last-child { border-bottom: none; }
+        .payment-details strong { color: var(--forest-dark); font-weight: 600; }
+        .payment-details span:last-child { color: var(--ink-soft); text-align: right; }
+        .qr-code { text-align: center; margin-bottom: 10px; }
+        .qr-code p { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
         .qr-code img {
-            max-width: 180px;
+            max-width: 170px;
             height: auto;
-            border: 1px solid var(--gray);
-            padding: 5px;
-            border-radius: 5px;
-            margin-top: 20px;
+            border: 1.5px solid var(--line);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            margin: 0 auto;
+            background: var(--white);
         }
-        .btn-confirm-payment {
-            margin-top: 30px;
-            background-color: var(--secondary);
-        }
-        .btn-confirm-payment:hover {
-            background-color: var(--secondary-hover);
-        }
-        .mensaje-pago {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
+        .mensaje-pago { margin-top: 20px; }
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
+            border: 3px solid var(--sand);
+            border-top: 3px solid var(--forest);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 22px;
+            height: 22px;
             animation: spin 1s linear infinite;
             display: inline-block;
             vertical-align: middle;
-            margin-left: 10px;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <header>
         <nav class="navbar">
-            <a href="index.html" class="logo">🐾 Veterinaria López</a>
+            <a href="index.html" class="logo">
+                <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="19" fill="#1F4B3F"/>
+                    <g fill="#FBFAF6">
+                        <circle cx="20" cy="24" r="6.5"/>
+                        <circle cx="11.5" cy="15.5" r="3.6"/>
+                        <circle cx="20" cy="11" r="4"/>
+                        <circle cx="28.5" cy="15.5" r="3.6"/>
+                    </g>
+                </svg>
+                Veterinaria López
+            </a>
             <ul class="nav-links">
                 <li><a href="index.html#inicio">Inicio</a></li>
                 <li><a href="index.html#servicios">Servicios</a></li>
-                <li><a href="index.html#reservar">Reservar Turno</a></li>
+                <li><a href="index.html#reservar" class="nav-cta">Reservar turno</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="container">
-        <div class="payment-container">
-            <h1>Confirmación de Pago de Reserva</h1>
-            
-            <div id="loading-spinner" style="display: none; margin-bottom: 20px;">
-                <div class="loader"></div> <p style="display: inline-block; margin-left: 10px;">Cargando detalles del turno...</p>
+        <div class="payment-container card-form">
+            <div class="card-form-header">
+                <h3 class="form-title">Confirmación de pago de reserva</h3>
+                <span class="mono">SEÑA</span>
             </div>
+            <div class="card-form-body">
 
-            <div id="turno-info" style="display: none;">
-                <div class="payment-details">
-                    <p><strong>Cliente:</strong> <span id="cliente-nombre"></span></p>
-                    <p><strong>Mascota:</strong> <span id="mascota-nombre"></span> (<span id="mascota-especie"></span>)</p>
-                    <p><strong>Motivo:</strong> <span id="motivo-consulta"></span></p>
-                    <p><strong>Fecha Asignada:</strong> <span id="fecha-confirmada"></span></p>
-                    <p><strong>Hora Asignada:</strong> <span id="hora-confirmada"></span></p>
-                    <p><strong>Veterinario:</strong> <span id="veterinario-asignado"></span></p>
-                    <p><strong>Estado del Turno:</strong> <span id="estado-turno"></span></p>
-                    <p><strong>Estado del Pago:</strong> <span id="estado-pago"></span></p>
+                <div id="loading-spinner" style="display: none; margin-bottom: 20px; text-align:center;">
+                    <div class="loader"></div> <p style="display: inline-block; margin-left: 10px; color: var(--ink-soft);">Cargando detalles del turno...</p>
                 </div>
 
-                <div class="qr-code">
-                    <p>Escanea para simular el pago:</p>
-                    <img id="qr-image" src="" alt="Código QR de Pago">
+                <div id="turno-info" style="display: none;">
+                    <div class="payment-details">
+                        <p><strong>Cliente</strong> <span id="cliente-nombre"></span></p>
+                        <p><strong>Mascota</strong> <span><span id="mascota-nombre"></span> (<span id="mascota-especie"></span>)</span></p>
+                        <p><strong>Motivo</strong> <span id="motivo-consulta"></span></p>
+                        <p><strong>Fecha asignada</strong> <span id="fecha-confirmada"></span></p>
+                        <p><strong>Hora asignada</strong> <span id="hora-confirmada"></span></p>
+                        <p><strong>Veterinario</strong> <span id="veterinario-asignado"></span></p>
+                        <p><strong>Estado del turno</strong> <span id="estado-turno"></span></p>
+                        <p><strong>Estado del pago</strong> <span id="estado-pago"></span></p>
+                    </div>
+
+                    <div class="qr-code">
+                        <p>Escaneá para simular el pago:</p>
+                        <img id="qr-image" src="" alt="Código QR de Pago">
+                    </div>
+
+                    <button id="btn-pagar" class="btn btn-secondary" style="margin-top: 24px;">Simular pago ahora</button>
                 </div>
 
-                <button id="btn-pagar" class="btn btn-secondary btn-confirm-payment">Simular Pago Ahora</button>
+                <div id="mensaje-final" class="mensaje-pago alert" style="display: none;"></div>
+                <a href="index.html" class="btn btn-outline" style="margin-top: 16px; display: none;" id="btn-volver-inicio">Volver al inicio</a>
             </div>
-
-            <div id="mensaje-final" class="mensaje-pago" style="display: none;"></div>
-            <a href="index.html" class="btn" style="margin-top: 20px; display: none;" id="btn-volver-inicio">Volver al Inicio</a>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Veterinaria López. Proyecto académico para Metodología de la Investigación.</p>
+    <footer style="padding: 26px 0;">
+        <div class="footer-bottom" style="border-top:none; padding-top:0;">
+            &copy; 2026 Veterinaria López. Proyecto académico para Metodología de la Investigación.
+        </div>
     </footer>
 
     <script>
@@ -140,7 +140,7 @@
         const mascotaEspecie = document.getElementById('mascota-especie');
         const motivoConsulta = document.getElementById('motivo-consulta');
         const fechaConfirmada = document.getElementById('fecha-confirmada');
-        const horaConfirmada = document.getElementById('hora-confirmada'); // <-- ¡AGREGADO DE FORMA SEGURA!
+        const horaConfirmada = document.getElementById('hora-confirmada');
         const veterinarioAsignado = document.getElementById('veterinario-asignado');
         const estadoTurno = document.getElementById('estado-turno');
         const estadoPago = document.getElementById('estado-pago');
@@ -168,8 +168,8 @@
                     mascotaEspecie.textContent = datos.mascota_especie;
                     motivoConsulta.textContent = datos.motivo_consulta;
                     fechaConfirmada.textContent = new Date(datos.fecha_confirmada).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
-                    
-                    // === NUEVA LÓGICA DE FORMATEO DE HORA ===
+
+                    // === LÓGICA DE FORMATEO DE HORA ===
                     if (datos.hora_confirmada) {
                         const horaDate = new Date(datos.hora_confirmada);
                         const horas = String(horaDate.getUTCHours()).padStart(2, '0');

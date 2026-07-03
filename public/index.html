@@ -3,166 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veterinaria López - Cuidado Profesional</title>
+    <title>Veterinaria López — Clínica veterinaria en Yerba Buena, Tucumán</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <header>
         <nav class="navbar">
-            <a href="#inicio" id="logo-secreto" class="logo">🐾 Veterinaria López</a>
+            <a href="#inicio" id="logo-secreto" class="logo">
+                <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="19" fill="#1F4B3F"/>
+                    <g fill="#FBFAF6">
+                        <circle cx="20" cy="24" r="6.5"/>
+                        <circle cx="11.5" cy="15.5" r="3.6"/>
+                        <circle cx="20" cy="11" r="4"/>
+                        <circle cx="28.5" cy="15.5" r="3.6"/>
+                    </g>
+                </svg>
+                Veterinaria López
+            </a>
             <ul class="nav-links">
-                <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#servicios">Servicios</a></li>
-                <li><a href="#reservar">Reservar Turno</a></li>
+                <li><a href="#equipo">Equipo</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#reservar" class="nav-cta">Reservar turno</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="container">
-        
-        <!-- Sección de Bienvenida -->
+
+        <!-- HERO -->
         <section id="inicio" class="hero">
-            <h1>Cuidamos a quienes más quieres</h1>
-            <p>Atención médica veterinaria con profesionales comprometidos con la salud y bienestar de tus mascotas.</p>
-        </section>
-
-        <!-- Sección de Servicios -->
-        <section id="servicios">
-            <h2 style="text-align: center; margin-bottom: 30px;">Nuestros Servicios</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h2>🩺</h2>
-                    <h3>Consulta General</h3>
-                    <p>Revisiones periódicas y diagnóstico preventivo para mantener a tu mascota saludable.</p>
+            <div class="hero-copy">
+                <span class="eyebrow">Clínica veterinaria · Yerba Buena, Tucumán</span>
+                <h1>Cuidado veterinario que trata a tu mascota <em>como familia</em></h1>
+                <p>Consultas, cirugía, diagnóstico por imágenes y análisis clínicos en un mismo lugar, con turnos que se confirman en el día y un equipo que conoce a cada paciente por su nombre.</p>
+                <div class="hero-actions">
+                    <a href="#reservar" class="btn btn-secondary btn-inline">Reservar un turno</a>
+                    <a href="#servicios" class="btn btn-outline btn-inline">Ver especialidades</a>
                 </div>
-                <div class="service-card">
-                    <h2>🩹</h2>
-                    <h3>Cirugía y Traumatología</h3>
-                    <p>Quirófano totalmente equipado con tecnología moderna para procedimientos seguros.</p>
-                </div>
-                <div class="service-card">
-                    <h2>🧪</h2>
-                    <h3>Análisis Clínicos</h3>
-                    <p>Laboratorio para la obtención de diagnósticos rápidos y precisos.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección de Nuestro Equipo (¡NUEVO!) -->
-        <section id="equipo" style="margin-top: 60px;">
-            <h2 style="text-align: center; margin-bottom: 30px;">Nuestro Equipo Médico</h2>
-            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
-                
-                <div class="service-card" style="border-top: 4px solid var(--primary);">
-                    <h2>👨‍⚕️</h2>
-                    <h3 style="margin-top: 10px;">Dr. Carlos Gómez</h3>
-                    <p style="color: var(--primary); font-weight: 600; font-size: 14px; margin-bottom: 10px;">Clínica General Canina</p>
-                    <p style="font-size: 14px; color: #7F8C8D;">Especialista en medicina preventiva, nutrición y cuidados integrales para caninos de todas las edades.</p>
-                </div>
-
-                <div class="service-card" style="border-top: 4px solid var(--primary);">
-                    <h2>👩‍⚕️</h2>
-                    <h3 style="margin-top: 10px;">Dra. Laura Martínez</h3>
-                    <p style="color: var(--primary); font-weight: 600; font-size: 14px; margin-bottom: 10px;">Especialista en Felinos</p>
-                    <p style="font-size: 14px; color: #7F8C8D;">Dedicada exclusivamente a la medicina felina, garantizando una atención amigable y libre de estrés para los gatos.</p>
-                </div>
-
-                <div class="service-card" style="border-top: 4px solid var(--primary);">
-                    <h2>👨‍⚕️</h2>
-                    <h3 style="margin-top: 10px;">Dr. Sebastián Rodríguez</h3>
-                    <p style="color: var(--primary); font-weight: 600; font-size: 14px; margin-bottom: 10px;">Cirugía y Traumatología</p>
-                    <p style="font-size: 14px; color: #7F8C8D;">Amplia experiencia en procedimientos quirúrgicos de tejidos blandos y resolución de afecciones óseas de urgencia.</p>
-                </div>
-
-                <div class="service-card" style="border-top: 4px solid var(--primary);">
-                    <h2>👩‍⚕️</h2>
-                    <h3 style="margin-top: 10px;">Dra. Sofía Benítez</h3>
-                    <p style="color: var(--primary); font-weight: 600; font-size: 14px; margin-bottom: 10px;">Cardiología Veterinaria</p>
-                    <p style="font-size: 14px; color: #7F8C8D;">Diagnóstico avanzado, ecocardiografía y tratamiento personalizado para el cuidado del corazón de tu mascota.</p>
-                </div>
-
-            </div>
-        </section>s
-
-        <!-- Sección de Reserva de Turnos -->
-        <section id="reservar" style="margin-top: 60px;">
-            <div class="card-form">
-                <h2 class="form-title">Solicitud de Turno Online</h2>
-                
-                <!-- Div para mostrar mensajes de éxito o error dinámicos -->
-                <div id="mensaje-alerta" style="display: none;"></div>
-
-                <form id="form-turno">
-                    <div class="form-grid">
-                        
-                        <!-- Datos Propietario -->
-                        <div class="form-group">
-                            <label for="cliente_nombre">Nombre del Propietario:</label>
-                            <input type="text" id="cliente_nombre" required placeholder="Ej: Juan Pérez">
-                        </div>
-                        <div class="form-group">
-                            <label for="cliente_telefono">Teléfono de Contacto:</label>
-                            <input type="tel" id="cliente_telefono" required placeholder="Ej: 1123456789">
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="cliente_email">Correo Electrónico:</label>
-                            <input type="email" id="cliente_email" required placeholder="Ej: juan@example.com">
-                        </div>
-
-                        <!-- Datos Mascota -->
-                        <div class="form-group">
-                            <label for="mascota_nombre">Nombre de la Mascota:</label>
-                            <input type="text" id="mascota_nombre" required placeholder="Ej: Toby">
-                        </div>
-                        <div class="form-group">
-                            <label for="mascota_especie">Especie:</label>
-                            <select id="mascota_especie" required>
-                                <option value="">Seleccione una especie</option>
-                                <option value="Perro">Perro</option>
-                                <option value="Gato">Gato</option>
-                                <option value="Ave">Ave</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <!-- Datos Consulta -->
-                        <div class="form-group">
-                            <label for="fecha_preferida">Fecha Preferida:</label>
-                            <input type="date" id="fecha_preferida" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="motivo_consulta">Motivo de Consulta:</label>
-                            <textarea id="motivo_consulta" required rows="3" placeholder="Ej: Control de vacunas, decaimiento, etc."></textarea>
-                        </div>
-
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="num">15+</span>
+                        <span class="label">Años atendiendo en Yerba Buena</span>
                     </div>
-                    <button type="submit" class="btn" style="margin-top: 10px;">Solicitar Turno</button>
-                </form>
+                    <div class="hero-stat">
+                        <span class="num">4</span>
+                        <span class="label">Médicos veterinarios especialistas</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="num">08–20h</span>
+                        <span class="label">Atención de lunes a sábados</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-panel">
+                <svg viewBox="0 0 480 560" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <pattern id="pawPattern" width="72" height="72" patternUnits="userSpaceOnUse" patternTransform="rotate(10)">
+                            <g fill="#FBFAF6" opacity="0.08">
+                                <circle cx="36" cy="44" r="9"/>
+                                <circle cx="23" cy="27" r="5"/>
+                                <circle cx="36" cy="20" r="5.5"/>
+                                <circle cx="49" cy="27" r="5"/>
+                            </g>
+                        </pattern>
+                    </defs>
+                    <rect width="480" height="560" fill="#1F4B3F"/>
+                    <rect width="480" height="560" fill="url(#pawPattern)"/>
+                    <g transform="translate(90,110)">
+                        <rect x="0" y="0" width="300" height="300" rx="26" fill="#FBFAF6"/>
+                        <circle cx="42" cy="40" r="9" fill="#1F4B3F"/>
+                        <circle cx="42" cy="40" r="5" fill="#FBFAF6"/>
+                        <g transform="translate(150,175)" stroke="#1F4B3F" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M-52,-70 v40 a30,30 0 0 0 60,0 v-40"/>
+                            <path d="M-22,-30 v28 a36,36 0 0 0 72,0 v-14"/>
+                            <circle cx="50" cy="-16" r="12" fill="#E2A33B" stroke="none"/>
+                        </g>
+                        <text x="150" y="270" text-anchor="middle" fill="#4B5A52" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="1.5">FICHA CLÍNICA · LÓPEZ</text>
+                    </g>
+                </svg>
+                <div class="hero-floating-card">
+                    <div class="icon-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.5 4 6.4 4c2 0 3.4 1.1 4.1 2.2C11.2 5.1 12.6 4 14.6 4c3.9 0 5.7 4.4 3.9 8-2.5 4.4-9 9-9 9z"/></svg>
+                    </div>
+                    <div>
+                        <strong>Confirmación en el día</strong>
+                        <span>Aprobamos tu solicitud y coordinamos el pago de la seña por email</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICIOS -->
+        <section id="servicios">
+            <div class="section-head">
+                <span class="eyebrow">Especialidades</span>
+                <h2>Un consultorio, todas las respuestas</h2>
+                <p>De la consulta de rutina a la urgencia quirúrgica, coordinamos cada especialidad para que no tengas que derivar a tu mascota a otro lugar.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card tag-card">
+                    <span class="service-index mono">01</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a4 4 0 0 0 8 0V3"/><path d="M17 8v3a5 5 0 0 1-10 0"/><circle cx="19" cy="6" r="2"/></svg>
+                    </div>
+                    <h3>Consulta general</h3>
+                    <p>Chequeos periódicos, vacunación y diagnóstico preventivo para mantener a tu mascota saludable en cada etapa.</p>
+                </div>
+                <div class="service-card tag-card">
+                    <span class="service-index mono">02</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5 15 6a2.1 2.1 0 0 1 3 3L7.5 19.5 3 21z"/><path d="M13.5 7.5 16.5 10.5"/></svg>
+                    </div>
+                    <h3>Cirugía y traumatología</h3>
+                    <p>Quirófano equipado para procedimientos de tejidos blandos y resolución de fracturas o urgencias óseas.</p>
+                </div>
+                <div class="service-card tag-card">
+                    <span class="service-index mono">03</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6l-5 9a3 3 0 0 0 3 4h10a3 3 0 0 0 3-4l-5-9V2"/><path d="M8.5 14h7"/></svg>
+                    </div>
+                    <h3>Análisis clínicos</h3>
+                    <p>Laboratorio propio para hemogramas, perfiles bioquímicos y estudios rápidos que agilizan el diagnóstico.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EQUIPO -->
+        <section id="equipo">
+            <div class="section-head">
+                <span class="eyebrow">Nuestro equipo</span>
+                <h2>Profesionales que tu mascota ya conoce</h2>
+                <p>Cuatro especialistas matriculados, cada uno enfocado en un área puntual de la medicina veterinaria.</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card tag-card">
+                    <div class="team-avatar">CG</div>
+                    <h3>Dr. Carlos Gómez</h3>
+                    <span class="team-role">Clínica general canina</span>
+                    <p>Medicina preventiva, nutrición y cuidados integrales para caninos de todas las edades.</p>
+                </div>
+                <div class="team-card tag-card">
+                    <div class="team-avatar">LM</div>
+                    <h3>Dra. Laura Martínez</h3>
+                    <span class="team-role">Especialista en felinos</span>
+                    <p>Atención exclusiva para gatos, con protocolos pensados para reducir el estrés en cada visita.</p>
+                </div>
+                <div class="team-card tag-card">
+                    <div class="team-avatar">SR</div>
+                    <h3>Dr. Sebastián Rodríguez</h3>
+                    <span class="team-role">Cirugía y traumatología</span>
+                    <p>Procedimientos de tejidos blandos y resolución de afecciones óseas de urgencia.</p>
+                </div>
+                <div class="team-card tag-card">
+                    <div class="team-avatar">SB</div>
+                    <h3>Dra. Sofía Benítez</h3>
+                    <span class="team-role">Cardiología veterinaria</span>
+                    <p>Ecocardiografía y tratamiento personalizado para la salud cardíaca de tu mascota.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FRANJA DE CONFIANZA -->
+        <section style="border-bottom:none; padding-top:0;">
+            <div class="trust-strip">
+                <div class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                    <div>
+                        <strong>Atención de lunes a sábados</strong>
+                        <span>08:00 a 20:00 hs, con turnos coordinados por franja horaria</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div>
+                        <strong>Turnos confirmados, no superpuestos</strong>
+                        <span>Cada profesional atiende un paciente por franja horaria</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                    <div>
+                        <strong>Aviso por email</strong>
+                        <span>Te avisamos apenas tu turno queda pre-aprobado</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESERVA DE TURNOS -->
+        <section id="reservar">
+            <div class="section-head" style="margin: 0 auto 40px; text-align:center; max-width: 640px;">
+                <span class="eyebrow" style="justify-content:center;">Solicitar turno</span>
+                <h2>Contanos sobre tu mascota</h2>
+                <p>Completá la ficha y nuestro equipo te confirma fecha, hora y veterinario asignado por correo electrónico.</p>
+            </div>
+
+            <div class="card-form">
+                <div class="card-form-header">
+                    <h3 class="form-title">Solicitud de turno online</h3>
+                    <span class="mono">FICHA N° NUEVA</span>
+                </div>
+                <div class="card-form-body">
+                    <div id="mensaje-alerta" style="display: none;"></div>
+
+                    <form id="form-turno">
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="cliente_nombre">Nombre del propietario</label>
+                                <input type="text" id="cliente_nombre" required placeholder="Ej: Juan Pérez">
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente_telefono">Teléfono de contacto</label>
+                                <input type="tel" id="cliente_telefono" required placeholder="Ej: 381 411-2233">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="cliente_email">Correo electrónico</label>
+                                <input type="email" id="cliente_email" required placeholder="Ej: juan@example.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mascota_nombre">Nombre de la mascota</label>
+                                <input type="text" id="mascota_nombre" required placeholder="Ej: Toby">
+                            </div>
+                            <div class="form-group">
+                                <label for="mascota_especie">Especie</label>
+                                <select id="mascota_especie" required>
+                                    <option value="">Seleccioná una especie</option>
+                                    <option value="Perro">Perro</option>
+                                    <option value="Gato">Gato</option>
+                                    <option value="Ave">Ave</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fecha_preferida">Fecha preferida</label>
+                                <input type="date" id="fecha_preferida" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="motivo_consulta">Motivo de consulta</label>
+                                <textarea id="motivo_consulta" required rows="3" placeholder="Ej: control de vacunas, decaimiento, etc."></textarea>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Solicitar turno</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section id="contacto" style="border-bottom:none;">
+            <div class="section-head">
+                <span class="eyebrow">Contacto</span>
+                <h2>Visitanos o escribinos</h2>
+                <p>Estamos en el corazón de Yerba Buena. Si preferís coordinar por teléfono o email, también podés escribirnos directamente.</p>
+            </div>
+            <div class="contact-wrap">
+                <div class="contact-info">
+                    <div class="contact-row">
+                        <div class="icon-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.7-6.5-11A6.5 6.5 0 0 1 12 3.5 6.5 6.5 0 0 1 18.5 10c0 5.3-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+                        </div>
+                        <div>
+                            <strong>Dirección</strong>
+                            <span>Av. Aconquija 1450, Yerba Buena, Tucumán</span>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="icon-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 4 6a2 2 0 0 1 0-2z"/></svg>
+                        </div>
+                        <div>
+                            <strong>Teléfono</strong>
+                            <a href="tel:+543814550192">+54 381 455-0192</a>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="icon-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6.5 8 6 8-6"/></svg>
+                        </div>
+                        <div>
+                            <strong>Correo electrónico</strong>
+                            <a href="mailto:contacto@veterinarialopez.com.ar">contacto@veterinarialopez.com.ar</a>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="icon-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                        </div>
+                        <div>
+                            <strong>Horario de atención</strong>
+                            <span>Lunes a sábados, 08:00 a 20:00 hs · Domingos cerrado</span>
+                        </div>
+                    </div>
+                    <div class="social-row">
+                        <a href="#" class="social-pill">Instagram @veterinarialopez</a>
+                        <a href="#" class="social-pill">WhatsApp</a>
+                    </div>
+                </div>
+                <div class="map-frame">
+                    <iframe src="https://www.google.com/maps?q=Yerba+Buena,+Tucum%C3%A1n,+Argentina&output=embed" loading="lazy" title="Ubicación de la clínica en Yerba Buena, Tucumán"></iframe>
+                </div>
             </div>
         </section>
 
     </main>
 
     <footer>
-        <p>
-            &copy; 2026 Veterinaria López. Proyecto académico para Metodología de la Investigación.
-            <span style="color: #7F8C8D; margin: 0 10px;">|</span>
-            <a href="#" id="link-admin-secreto" style="color: #BDC3C7; text-decoration: none; font-size: 14px; transition: color 0.3s;">Acceso Personal</a>
-        </p>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#inicio" class="logo">
+                    <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="19" fill="#FBFAF6" fill-opacity="0.12"/>
+                        <g fill="#FBFAF6">
+                            <circle cx="20" cy="24" r="6.5"/>
+                            <circle cx="11.5" cy="15.5" r="3.6"/>
+                            <circle cx="20" cy="11" r="4"/>
+                            <circle cx="28.5" cy="15.5" r="3.6"/>
+                        </g>
+                    </svg>
+                    Veterinaria López
+                </a>
+                <p>Clínica veterinaria en Yerba Buena, Tucumán. Proyecto académico desarrollado para la asignatura Metodología de la Investigación.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#equipo">Equipo</a></li>
+                    <li><a href="#reservar">Reservar turno</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Clínica</h4>
+                <ul>
+                    <li><span>Av. Aconquija 1450, Yerba Buena</span></li>
+                    <li><span>+54 381 455-0192</span></li>
+                    <li><a href="#" id="link-admin-secreto">Acceso de personal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Veterinaria López. Proyecto académico para Metodología de la Investigación — pagos y datos simulados con fines didácticos.
+        </div>
     </footer>
 
     <!-- Modal Oculto para Acceso Admin (Easter Egg) -->
-    <div id="modal-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
-        <div class="card-form" style="max-width: 350px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-            <h3 class="form-title" style="font-size: 18px; margin-bottom: 15px;">Acceso de Personal</h3>
-            <div class="form-group">
-                <label for="input-pass-secreta">Contraseña Administrativa:</label>
-                <input type="password" id="input-pass-secreta" placeholder="Ingrese clave">
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="verificarClaveSecreta()" class="btn" style="padding: 10px;">Entrar</button>
-                <button onclick="cerrarModalAdmin()" class="btn" style="background-color: var(--gray); color: var(--dark); padding: 10px;">Cancelar</button>
+    <div id="modal-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,48,40,0.55); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="card-form" style="max-width: 360px; width: 90%;">
+            <div class="card-form-body">
+                <h3 class="form-title" style="font-size: 18px; margin-bottom: 15px;">Acceso de personal</h3>
+                <div class="form-group">
+                    <label for="input-pass-secreta">Contraseña administrativa</label>
+                    <input type="password" id="input-pass-secreta" placeholder="Ingresá la clave">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="verificarClaveSecreta()" class="btn">Entrar</button>
+                    <button onclick="cerrarModalAdmin()" class="btn btn-ghost">Cancelar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -228,20 +435,14 @@
         // ==========================================
         // LÓGICA DEL ACCESO OCULTO (EASTER EGG)
         // ==========================================
-        const adminTrigger = document.getElementById('logo-admin-trigger') || document.getElementById('logo-logo');
-        
-        // Buscamos el nuevo enlace del footer
-        const linkAdmin = document.querySelector('footer a') || document.getElementById('logo-logo');
-        
-        // Reemplaza el event listener anterior por este simple clic en el footer:
-        document.querySelector('footer a').addEventListener('click', (e) => {
+        document.getElementById('link-admin-secreto').addEventListener('click', (e) => {
             e.preventDefault(); // Evita que la página navegue o se recargue
             document.getElementById('modal-admin').style.display = 'flex';
         });
 
         function verificarClaveSecreta() {
             const password = document.getElementById('input-pass-secreta').value;
-            
+
             if (password === 'admin123') {
                 // Guardamos el estado de autenticación en la sesión del navegador
                 sessionStorage.setItem('admin_login', 'true');
